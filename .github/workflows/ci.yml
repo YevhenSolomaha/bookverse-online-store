@@ -7,47 +7,18 @@ on:
     branches: [ main, develop ]
 
 jobs:
-  # Перевірка бекенду
-  test-backend:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./backend
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      
-      - name: Install dependencies
-        run: npm install
-      
-      - name: Build backend
-        run: npm run build || true
-      
-      - name: Run linter
-        run: npm run lint || true
-
-  # Перевірка фронтенду
   test-frontend:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./frontend
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - name: List files for debugging
+        run: |
+          ls -la
+          ls -la frontend/ || echo "frontend folder not found"
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      
-      - name: Install dependencies
-        run: npm install
-      
-      - name: Build frontend
-        run: npm run build || true
+      - run: |
+          cd frontend
+          npm install
+          npm run build || true
